@@ -1,0 +1,17 @@
+# Code in R (v4.3.1) for the paper: "Psychometric validation of the Hospital Stress Questionnaire"
+
+# Load packages and survey response data
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("psych")
+library(psych)
+install.packages("readr")
+library(readr)
+vdata <- read_csv("vdata.csv")
+View(vdata)
+
+# Set N/A values (i.e. values of 11) in HSQ equal to 1
+vdata <- vdata %>% mutate_at(vars(starts_with("HSQ_")), ~ ifelse(. == 11, 1, .))
+
+# Calculate a total HSQ score for each participant
+vdata <- vdata %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
