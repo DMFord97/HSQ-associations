@@ -1,4 +1,4 @@
-# Code in R (v4.3.2) for the paper: "Associations of hospital stress"
+# Code in R (v4.3.2) for the paper: "Associations of in-hospital psychological stress"
 
 # Load packages
 install.packages("tidyverse")
@@ -29,6 +29,13 @@ rdata <- rdata %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_2
 # See "Psychometric validation of the Hospital Stress Questionnaire" for descriptive statistics
 
 # Sex differences in HSQ score
-HSQ_male <- rdata55$HSQ_total55[rdata55$sex == 1]
-HSQ_female <- rdata55$HSQ_total55[rdata55$sex == 2]
-t.test(HSQ_planned,HSQ_emergency)
+HSQ_male <- rdata$HSQ_total55[rdata$sex == 1]
+HSQ_female <- rdata$HSQ_total55[rdata$sex == 2]
+t.test(HSQ_male,HSQ_female)
+
+# Surgical differences in HSQ score
+surgery <- rdata$HSQ_total55[rdata$surgery == 1]
+medical <- rdata$HSQ_total55[rdata$surgery == 2]
+t.test(surgery,medical)
+
+#
