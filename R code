@@ -72,20 +72,18 @@ cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
 # model2 - HSQ-55 total score
 # model3 - UCLA and LSNS
 # model4 - multiplicative interaction term: HSQ x moderators
-model1 <- lm(vulnerability ~ age_c + sex, data = rdata)
-model2 <- lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata)
-model3 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata)
+
+rdata_na <- rdata %>% filter(!is.na(UCLA_total & LSNS_total))
+model1 <- lm(vulnerability ~ age_c + sex, data = rdata_na)
+model2 <- lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata_na)
+model3 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_na)
+summary(model1)
+summary(model2)
+summary(model3)
 rsq_change <- summary(model2)$r.squared - summary(model1)$r.squared
 rsq_change2 <- summary(model3)$r.squared - summary(model2)$r.squared
 anova(model1, model2, test = "F")
 anova(model2, model3, test = "F")
 
-# Without N/As
-rdata_na <- rdata %>% filter(!is.na(UCLA_total & LSNS_total))
-model1 <- lm(vulnerability ~ age_c + sex, data = rdata_na)
-model2 <- lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata_na)
-model3 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_na)
-rsq_change <- summary(model2)$r.squared - summary(model1)$r.squared
-rsq_change2 <- summary(model3)$r.squared - summary(model2)$r.squared
-anova(model1, model2, test = "F")
-anova(model2, model3, test = "F")
+
+#
