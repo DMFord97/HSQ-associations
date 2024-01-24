@@ -5,6 +5,8 @@ install.packages("tidyverse")
 library(tidyverse)
 install.packages("psych")
 library(psych)
+install.packages("QuantPsyc")
+library(QuantPsyc)
 install.packages("readr")
 library(readr)
 
@@ -64,3 +66,13 @@ cor.test(rdata$stays_life, rdata$HSQ_total55)  # number of previous hospital sta
 cor.test(rdata$stays_year, rdata$HSQ_total55)  # number of previous hospital stays in past year
 cor.test(rdata$UCLA_total, rdata$HSQ_total55)  # UCLA
 cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
+
+# Hierarchical regression predicting post-hsopital feelings of vulnerability
+# model1 - age and sex
+# model2 - HSQ-55 total score
+# model3 - UCLA and LSNS
+# model4 - multiplicative interaction term: HSQ x moderators
+model1 <- lm(vulnerability ~ age_c + sex, data = rdata)
+model2 <- lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata)
+model3 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata)
+rsq_change <- summary(model2)$r.squared - summary(model1)$r.squared
