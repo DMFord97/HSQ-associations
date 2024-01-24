@@ -1,4 +1,4 @@
-# Code in R (v4.3.1) for the paper: "Associations of hospital stress"
+# Code in R (v4.3.2) for the paper: "Associations of hospital stress"
 
 # Load packages
 install.packages("tidyverse")
@@ -15,5 +15,20 @@ View(rdata)
 # Set N/A values (i.e. values of 11) in HSQ equal to 1
 rdata <- rdata %>% mutate_at(vars(starts_with("HSQ_")), ~ ifelse(. == 11, 1, .))
 
-# Calculate a total HSQ score for each participant
-rdata <- rdata %>% mutate(HSQ_total = rowSums(across(HSQ_1:HSQ_67)))
+# Calculate a total HSQ score for the 55, 28, and 10-item versions
+rdata <- rdata %>% mutate(HSQ_total55 = rowSums(across(HSQ_1:HSQ_67)) - (HSQ_5 + HSQ_20 + HSQ_22 + HSQ_23 + HSQ_26 + HSQ_29 + HSQ_30 + HSQ_35 + HSQ_49 + HSQ_50 + HSQ_55 + HSQ_65))
+rdata <- rdata %>% mutate(HSQ_total28 = HSQ_16 + HSQ_7 + HSQ_52 + HSQ_21 +
+                                        HSQ_32 + HSQ_19 + HSQ_18 + HSQ_43 +
+                                        HSQ_61 + HSQ_66 + HSQ_59 + HSQ_60 +
+                                        HSQ_15 + HSQ_56 + HSQ_11 + HSQ_39 +
+                                        HSQ_63 + HSQ_3 + HSQ_46 + HSQ_24 +
+                                        HSQ_4 + HSQ_28 + HSQ_34 + HSQ_17 +
+                                        HSQ_36 + HSQ_38 + HSQ_37 + HSQ_42)
+rdata <- rdata %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_27 + HSQ_16 + HSQ_11 + HSQ_41 + HSQ_37 + HSQ_24)
+
+# See "Psychometric validation of the Hospital Stress Questionnaire" for descriptive statistics
+
+# Sex differences in HSQ score
+HSQ_male <- rdata55$HSQ_total55[rdata55$sex == 1]
+HSQ_female <- rdata55$HSQ_total55[rdata55$sex == 2]
+t.test(HSQ_planned,HSQ_emergency)
