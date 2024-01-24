@@ -31,11 +31,26 @@ rdata <- rdata %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_2
 # Sex differences in HSQ score
 HSQ_male <- rdata$HSQ_total55[rdata$sex == 1]
 HSQ_female <- rdata$HSQ_total55[rdata$sex == 2]
-t.test(HSQ_male,HSQ_female)
+t.test(HSQ_male, HSQ_female)
 
 # Surgical differences in HSQ score
 surgery <- rdata$HSQ_total55[rdata$surgery == 1]
 medical <- rdata$HSQ_total55[rdata$surgery == 2]
-t.test(surgery,medical)
+t.test(surgery, medical)
+
+# Service user differences in HSQ score
+NHS <- rdata$HSQ_total55[rdata$private == 1]
+private <- rdata$HSQ_total55[rdata$private == 2]
+t.test(NHS, private)
+
+# Readmission differences in HSQ score
+Second_visit <- rdata$HSQ_total55[rdata$readmission == 1]
+First_visit <- rdata$HSQ_total55[rdata$readmission == 2]
+t.test(Second_visit, First_visit)
+
+# Marital status differences in HSQ score
+married <- rdata$HSQ_total55[rdata$marital %in% c(2, 3)]
+unmarried <- rdata$HSQ_total55[rdata$marital %in% c(1, 4:6)]
+t.test(married, unmarried)
 
 #
