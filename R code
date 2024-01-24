@@ -26,6 +26,10 @@ rdata <- rdata %>% mutate(HSQ_total28 = HSQ_16 + HSQ_7 + HSQ_52 + HSQ_21 +
                                         HSQ_36 + HSQ_38 + HSQ_37 + HSQ_42)
 rdata <- rdata %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_27 + HSQ_16 + HSQ_11 + HSQ_41 + HSQ_37 + HSQ_24)
 
+# Calculate total scores for UCLA and LSNS
+rdata <- rdata %>% mutate(UCLA_total = UCLA_1 + UCLA_2 + UCLA_3)
+rdata <- rdata %>% mutate(LSNS_total = LSNS_1 + LSNS_2 + LSNS_3 + LSNS_4 + LSNS_5 + LSNS_6)
+
 # See "Psychometric validation of the Hospital Stress Questionnaire" for descriptive statistics
 
 # Sex differences in HSQ score
@@ -53,4 +57,10 @@ married <- rdata$HSQ_total55[rdata$marital %in% c(2, 3)]
 unmarried <- rdata$HSQ_total55[rdata$marital %in% c(1, 4:6)]
 t.test(married, unmarried)
 
-#
+# Correlates of HSQ score
+cor.test(rdata$age_c, rdata$HSQ_total55)  # age
+cor.test(rdata$LOS, rdata$HSQ_total55)  # length of stay
+cor.test(rdata$stays_life, rdata$HSQ_total55)  # number of previous hospital stays in life
+cor.test(rdata$stays_year, rdata$HSQ_total55)  # number of previous hospital stays in past year
+cor.test(rdata$UCLA_total, rdata$HSQ_total55)  # UCLA
+cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
