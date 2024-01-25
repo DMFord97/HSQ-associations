@@ -28,9 +28,18 @@ rdata <- rdata %>% mutate(HSQ_total28 = HSQ_16 + HSQ_7 + HSQ_52 + HSQ_21 +
                                         HSQ_36 + HSQ_38 + HSQ_37 + HSQ_42)
 rdata <- rdata %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_27 + HSQ_16 + HSQ_11 + HSQ_41 + HSQ_37 + HSQ_24)
 
-# Calculate total scores for UCLA and LSNS
-rdata <- rdata %>% mutate(UCLA_total = UCLA_1 + UCLA_2 + UCLA_3)
-rdata <- rdata %>% mutate(LSNS_total = LSNS_1 + LSNS_2 + LSNS_3 + LSNS_4 + LSNS_5 + LSNS_6)
+# Calculate total scores for EQ-5D, UCLA, and LSNS
+rdata <- rdata %>% mutate(EQ5D_total = rowSums(across(EQ5D_1:EQ5D_5)))
+rdata <- rdata %>% mutate(UCLA_total = rowSums(across(UCLA_1:UCLA_3)))
+rdata <- rdata %>% mutate(LSNS_total = rowSums(across(LSNS_1:LSNS_6)))
+rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
+
+# Recode PACT-M outcome variables and calculate a total score - values of 2 ("no") and 3 ("maybe") get recoded as 0
+rdata$PACTM_1[rdata$PACTM_1 %in% c(2, 3)] <- 0
+rdata$PACTM_2[rdata$PACTM_2 %in% c(2, 3)] <- 0
+rdata$PACTM_3[rdata$PACTM_3 %in% c(2, 3)] <- 0
+rdata$PACTM_4[rdata$PACTM_4 %in% c(2, 3)] <- 0
+rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
 
 # See "Psychometric validation of the Hospital Stress Questionnaire" for descriptive statistics
 
@@ -67,13 +76,15 @@ cor.test(rdata$stays_year, rdata$HSQ_total55)  # number of previous hospital sta
 cor.test(rdata$UCLA_total, rdata$HSQ_total55)  # UCLA
 cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
 
-# Hierarchical regression predicting post-hsopital feelings of vulnerability
+# Hierarchical regressions
 # model1 - age and sex
 # model2 - HSQ-55 total score
 # model3 - UCLA and LSNS
 # model4 - multiplicative interaction term: HSQ x moderators
 
 rdata_na <- rdata %>% filter(!is.na(UCLA_total & LSNS_total))
+
+# predicting post-hospital feelings of vulnerability
 model1 <- lm(vulnerability ~ age_c + sex, data = rdata_na)
 model2 <- lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata_na)
 model3 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_na)
@@ -86,4 +97,28 @@ summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
 
-#
+# predicting quality of life in two weeks post-discharge (using EQ-5D)
+model1 <- lm(EQ5D_total ~ age_c + sex, data = rdata_na)
+model2 <- lm(EQ5D_total ~ age_c + sex + HSQ_total55, data = rdata_na)
+model3 <- lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_na)
+model4 <- lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_na)
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model4)
+summary(model2)$r.squared - summary(model1)$r.squared
+summary(model3)$r.squared - summary(model2)$r.squared
+summary(model4)$r.squared - summary(model3)$r.squared
+
+# predicting patient outcomes used in PACT-M
+model1 <- lm(PACTM_total ~ age_c + sex, data = rdata_na)
+model2 <- lm(PACTM_total ~ age_c + sex + HSQ_total55, data = rdata_na)
+model3 <- lm(PACTM_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_na)
+model4 <- lm(PACTM_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_na)
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model4)
+summary(model2)$r.squared - summary(model1)$r.squared
+summary(model3)$r.squared - summary(model2)$r.squared
+summary(model4)$r.squared - summary(model3)$r.squared
