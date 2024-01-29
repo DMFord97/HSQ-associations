@@ -51,10 +51,13 @@ HSQ_male <- rdata$HSQ_total55[rdata$sex == 1]
 HSQ_female <- rdata$HSQ_total55[rdata$sex == 2]
 t.test(HSQ_male, HSQ_female)
 
-# Surgical differences in HSQ score
+# Medical/surgical differences in HSQ score
 surgery <- rdata$HSQ_total55[rdata$surgery == 1]
 medical <- rdata$HSQ_total55[rdata$surgery == 2]
 t.test(surgery, medical)
+# Control for planned/emergency
+ancova <- lm(HSQ_total55 ~ surgery + planned, data = rdata)
+summary(ancova)
 
 # Service user differences in HSQ score
 NHS <- rdata$HSQ_total55[rdata$private == 1]
