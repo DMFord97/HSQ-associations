@@ -90,7 +90,7 @@ cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
 
 # Remove NA values and mean centre the continuous predictor variables
 rdata_na <- rdata %>% filter(!is.na(UCLA_total & LSNS_total))
-rdata_c <- rdata_na %>% dplyr::select(PACTM_total, age_c, sex, HSQ_total55, UCLA_total, LSNS_total)
+rdata_c <- rdata_na %>% dplyr::select(vulnerability, usual, EQ5D_total, PACTM_total, age_c, sex, HSQ_total55, UCLA_total, LSNS_total)
 rdata_c <- rdata_c %>% mutate_at(vars(HSQ_total55, age_c, UCLA_total, LSNS_total), ~ . - mean(., na.rm = TRUE))
 
 # predicting post-hospital feelings of vulnerability
