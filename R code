@@ -30,10 +30,10 @@ rdata <- rdata %>% mutate(HSQ_total10 = HSQ_52 + HSQ_44 + HSQ_6 + HSQ_51 + HSQ_2
 
 # Reverse code items 4, 5, 7, and 8 of PSS-10
 reverse_columns <- c("PSS_4", "PSS_5", "PSS_7", "PSS_8")
-vdata[, reverse_columns] <- 4 - vdata[, reverse_columns]
+rdata[, reverse_columns] <- 4 - rdata[, reverse_columns]
 
 # Calculate a total PSS-10 score for each participant
-vdata <- vdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
+rdata <- rdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
 
 # Calculate total scores for EQ-5D, UCLA, and LSNS
 rdata <- rdata %>% mutate(EQ5D_total = rowSums(across(EQ5D_1:EQ5D_5)))
