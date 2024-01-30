@@ -41,11 +41,11 @@ rdata <- rdata %>% mutate(UCLA_total = rowSums(across(UCLA_1:UCLA_3)))
 rdata <- rdata %>% mutate(LSNS_total = rowSums(across(LSNS_1:LSNS_6)))
 rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
 
-# Recode PACT-M outcome variables and calculate a total score - values of 2 ("no") and 3 ("maybe") get recoded as 0
-rdata$PACTM_1[rdata$PACTM_1 %in% c(2, 3)] <- 0
-rdata$PACTM_2[rdata$PACTM_2 %in% c(2, 3)] <- 0
-rdata$PACTM_3[rdata$PACTM_3 %in% c(2, 3)] <- 0
-rdata$PACTM_4[rdata$PACTM_4 %in% c(2, 3)] <- 0
+# Recode PACT-M outcome variables and calculate a total score - values of 2 ("not sure") get recoded as 0 ("no")
+rdata$PACTM_1[rdata$PACTM_1 == 2] <- 0
+rdata$PACTM_2[rdata$PACTM_2 == 2] <- 0
+rdata$PACTM_3[rdata$PACTM_3 == 2] <- 0
+rdata$PACTM_4[rdata$PACTM_4 == 2] <- 0
 rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
 
 # Recode "return to usual activities" variable from categorical to continuous (median number of weeks)
@@ -60,21 +60,21 @@ t.test(HSQ_male, HSQ_female)
 
 # Medical/surgical differences in HSQ score
 surgery <- rdata$HSQ_total55[rdata$surgery == 1]
-medical <- rdata$HSQ_total55[rdata$surgery == 2]
+medical <- rdata$HSQ_total55[rdata$surgery == 0]
 t.test(surgery, medical)
 # Control for planned/emergency
 ancova <- lm(HSQ_total55 ~ surgery + planned, data = rdata)
 summary(ancova)
 
 # Service user differences in HSQ score
-NHS <- rdata$HSQ_total55[rdata$private == 1]
-private <- rdata$HSQ_total55[rdata$private == 2]
+NHS <- rdata$HSQ_total55[rdata$private == 0]
+private <- rdata$HSQ_total55[rdata$private == 1]
 t.test(NHS, private)
 
 # Readmission differences in HSQ score
-Second_visit <- rdata$HSQ_total55[rdata$readmission == 1]
-First_visit <- rdata$HSQ_total55[rdata$readmission == 2]
-t.test(Second_visit, First_visit)
+second_visit <- rdata$HSQ_total55[rdata$readmission == 1]
+first_visit <- rdata$HSQ_total55[rdata$readmission == 0]
+t.test(second_visit, first_visit)
 
 # Marital status differences in HSQ score
 married <- rdata$HSQ_total55[rdata$marital %in% c(2, 3)]
