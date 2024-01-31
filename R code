@@ -108,7 +108,7 @@ cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
 
 # Remove NA values and mean centre the continuous predictor variables
 rdata_na <- rdata %>% filter(!is.na(UCLA_total & LSNS_total))
-rdata_c <- rdata_na %>% dplyr::select(vulnerability, usual, EQ5D_total, PACTM_total, age_c, sex, HSQ_total55, UCLA_total, LSNS_total)
+rdata_c <- rdata_na %>% select(vulnerability, usual, EQ5D_total, PACTM_total, age_c, sex, HSQ_total55, HSQ_total28, HSQ_total10, factor1:factor7, UCLA_total, LSNS_total)
 rdata_c <- rdata_c %>% mutate_at(vars(HSQ_total55, age_c, UCLA_total, LSNS_total), ~ . - mean(., na.rm = TRUE))
 
 # predicting post-hospital feelings of vulnerability
@@ -162,3 +162,45 @@ summary(model4)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
+
+# Regressions for factors, rather than total score
+
+# predicting post-hospital feelings of vulnerability
+model1 <- lm(vulnerability ~ age_c + sex, data = rdata_c)
+model2 <- lm(vulnerability ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
+model3 <- lm(vulnerability ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model2)$r.squared - summary(model1)$r.squared
+summary(model3)$r.squared - summary(model2)$r.squared
+
+# predicting time to return to usual activities
+model1 <- lm(usual ~ age_c + sex, data = rdata_c)
+model2 <- lm(usual ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
+model3 <- lm(usual ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model2)$r.squared - summary(model1)$r.squared
+summary(model3)$r.squared - summary(model2)$r.squared
+
+# predicting quality of life in two weeks post-discharge (using EQ-5D)
+model1 <- lm(EQ5D_total ~ age_c + sex, data = rdata_c)
+model2 <- lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
+model3 <- lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model2)$r.squared - summary(model1)$r.squared
+summary(model3)$r.squared - summary(model2)$r.squared
+
+# predicting patient outcomes used in PACT-M
+model1 <- lm(PACTM_total ~ age_c + sex, data = rdata_c)
+model2 <- lm(PACTM_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
+model3 <- lm(PACTM_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+summary(model1)
+summary(model2)
+summary(model3)
+summary(model2)$r.squared - summary(model1)$r.squared
+summary(model3)$r.squared - summary(model2)$r.squared
