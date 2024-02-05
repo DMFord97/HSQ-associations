@@ -5,8 +5,8 @@ install.packages("tidyverse")
 library(tidyverse)
 install.packages("psych")
 library(psych)
-install.packages("QuantPsyc")
-library(QuantPsyc)
+install.packages("lm.beta")
+library(lm.beta)
 install.packages("readr")
 library(readr)
 
@@ -112,10 +112,10 @@ rdata_c <- rdata_na %>% select(vulnerability, usual, EQ5D_total, PACTM_total, ag
 rdata_c <- rdata_c %>% mutate_at(vars(HSQ_total55, HSQ_total28, HSQ_total10, factor1:factor7, age_c, UCLA_total, LSNS_total), ~ . - mean(., na.rm = TRUE))
 
 # predicting post-hospital feelings of vulnerability
-model1 <- lm(vulnerability ~ age_c + sex, data = rdata_c)
-model2 <- lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata_c)
-model3 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c)
-model4 <- lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(vulnerability ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(vulnerability ~ age_c + sex + HSQ_total55, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
+model4 <- lm.beta(lm(vulnerability ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -125,10 +125,10 @@ summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
 
 # predicting time to return to usual activities
-model1 <- lm(usual ~ age_c + sex, data = rdata_c)
-model2 <- lm(usual ~ age_c + sex + HSQ_total55, data = rdata_c)
-model3 <- lm(usual ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c)
-model4 <- lm(usual ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(usual ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(usual ~ age_c + sex + HSQ_total55, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(usual ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
+model4 <- lm.beta(lm(usual ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -138,10 +138,10 @@ summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
 
 # predicting quality of life in two weeks post-discharge (using EQ-5D)
-model1 <- lm(EQ5D_total ~ age_c + sex, data = rdata_c)
-model2 <- lm(EQ5D_total ~ age_c + sex + HSQ_total55, data = rdata_c)
-model3 <- lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c)
-model4 <- lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(EQ5D_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(EQ5D_total ~ age_c + sex + HSQ_total55, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
+model4 <- lm.beta(lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -151,10 +151,10 @@ summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
 
 # predicting patient outcomes used in PACT-M
-model1 <- lm(PACTM_total ~ age_c + sex, data = rdata_c)
-model2 <- lm(PACTM_total ~ age_c + sex + HSQ_total55, data = rdata_c)
-model3 <- lm(PACTM_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c)
-model4 <- lm(PACTM_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(PACTM_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(PACTM_total ~ age_c + sex + HSQ_total55, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(PACTM_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
+model4 <- lm.beta(lm(PACTM_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -166,9 +166,9 @@ summary(model4)$r.squared - summary(model3)$r.squared
 # Regressions for factors, rather than total score
 
 # predicting post-hospital feelings of vulnerability
-model1 <- lm(vulnerability ~ age_c + sex, data = rdata_c)
-model2 <- lm(vulnerability ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
-model3 <- lm(vulnerability ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(vulnerability ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(vulnerability ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(vulnerability ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -176,9 +176,9 @@ summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 
 # predicting time to return to usual activities
-model1 <- lm(usual ~ age_c + sex, data = rdata_c)
-model2 <- lm(usual ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
-model3 <- lm(usual ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(usual ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(usual ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(usual ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -186,9 +186,9 @@ summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 
 # predicting quality of life in two weeks post-discharge (using EQ-5D)
-model1 <- lm(EQ5D_total ~ age_c + sex, data = rdata_c)
-model2 <- lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
-model3 <- lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(EQ5D_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -196,9 +196,9 @@ summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 
 # predicting patient outcomes used in PACT-M
-model1 <- lm(PACTM_total ~ age_c + sex, data = rdata_c)
-model2 <- lm(PACTM_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c)
-model3 <- lm(PACTM_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c)
+model1 <- lm.beta(lm(PACTM_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(PACTM_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(PACTM_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
