@@ -46,11 +46,13 @@ rdata[, reverse_columns] <- 4 - rdata[, reverse_columns]
 # Calculate a total PSS-10 score for each participant
 rdata <- rdata %>% mutate(PSS_total = rowSums(across(PSS_1:PSS_10)))
 
-# Calculate total scores for EQ-5D, UCLA, and LSNS
-rdata <- rdata %>% mutate(EQ5D_total = rowSums(across(EQ5D_1:EQ5D_5)))
+# Calculate total scores for UCLA and LSNS
 rdata <- rdata %>% mutate(UCLA_total = rowSums(across(UCLA_1:UCLA_3)))
 rdata <- rdata %>% mutate(LSNS_total = rowSums(across(LSNS_1:LSNS_6)))
-rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
+
+# Convert EQ-5D health states to index score
+eq5d_df <- rdata %>% select(EQ5D_1:EQ5D_5) %>% rename(MO = EQ5D_1, SC = EQ5D_2, UA = EQ5D_3, PD = EQ5D_4, AD = EQ5D_5)
+rdata$index <- eq5d(scores = eq5d_df, version = "5L", type = "VT", country = "England")
 
 # Recode PACT-M outcome variables and calculate a total score - values of 2 ("not sure") get recoded as 0 ("no")
 rdata$PACTM_1[rdata$PACTM_1 == 2] <- 0
@@ -63,6 +65,7 @@ rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
 rdata <- rdata %>% mutate(usual = recode(usual, "1" = 0.5, "2" = 1.5, "3" = 3, "4" = 5, "5" = 9, "6" = 19.5, "7" = 39, "8" = 52))
 
 # See "Psychometric validation of the Hospital Stress Questionnaire" for descriptive statistics
+# See GitHub repository "DMFord97/Validation" for R code to produce desriptive statistics
 
 # Sex differences in HSQ score
 HSQ_male <- rdata$HSQ_total55[rdata$sex == 1]
@@ -108,7 +111,7 @@ cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
 
 # Remove NA values and mean centre the continuous predictor variables
 rdata_na <- rdata %>% filter(!is.na(UCLA_total & LSNS_total))
-rdata_c <- rdata_na %>% select(vulnerability, usual, EQ5D_total, PACTM_total, age_c, sex, HSQ_total55, HSQ_total28, HSQ_total10, factor1:factor7, UCLA_total, LSNS_total)
+rdata_c <- rdata_na %>% select(vulnerability, usual, index, PACTM_total, age_c, sex, HSQ_total55, HSQ_total28, HSQ_total10, factor1:factor7, UCLA_total, LSNS_total)
 rdata_c <- rdata_c %>% mutate_at(vars(HSQ_total55, HSQ_total28, HSQ_total10, factor1:factor7, age_c, UCLA_total, LSNS_total), ~ . - mean(., na.rm = TRUE))
 
 # predicting post-hospital feelings of vulnerability
@@ -137,11 +140,11 @@ summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
 
-# predicting quality of life in two weeks post-discharge (using EQ-5D)
-model1 <- lm.beta(lm(EQ5D_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
-model2 <- lm.beta(lm(EQ5D_total ~ age_c + sex + HSQ_total55, data = rdata_c), complete.standardization = T)
-model3 <- lm.beta(lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
-model4 <- lm.beta(lm(EQ5D_total ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c), complete.standardization = T)
+# predicting health-related quality of life in two weeks post-discharge (using EQ-5D)
+model1 <- lm.beta(lm(index ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(index ~ age_c + sex + HSQ_total55, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(index ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
+model4 <- lm.beta(lm(index ~ age_c + sex + HSQ_total55 + UCLA_total + LSNS_total + HSQ_total55:UCLA_total + HSQ_total55:LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
@@ -185,10 +188,10 @@ summary(model3)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 
-# predicting quality of life in two weeks post-discharge (using EQ-5D)
-model1 <- lm.beta(lm(EQ5D_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
-model2 <- lm.beta(lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c), complete.standardization = T)
-model3 <- lm.beta(lm(EQ5D_total ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
+# predicting health-related quality of life in two weeks post-discharge (using EQ-5D)
+model1 <- lm.beta(lm(index ~ age_c + sex, data = rdata_c), complete.standardization = T)
+model2 <- lm.beta(lm(index ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7, data = rdata_c), complete.standardization = T)
+model3 <- lm.beta(lm(index ~ age_c + sex + factor1 + factor2 + factor3 + factor4 + factor5 + factor6 + factor7 + UCLA_total + LSNS_total, data = rdata_c), complete.standardization = T)
 summary(model1)
 summary(model2)
 summary(model3)
