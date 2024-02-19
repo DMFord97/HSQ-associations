@@ -72,6 +72,16 @@ HSQ_male <- rdata$HSQ_total55[rdata$sex == 1]
 HSQ_female <- rdata$HSQ_total55[rdata$sex == 2]
 t.test(HSQ_male, HSQ_female)
 
+# Ethnicity differences in HSQ score
+white <- rdata$HSQ_total55[rdata$ethnicity == 4]
+other <- rdata$HSQ_total55[rdata$ethnicity != 4]
+t.test(white, other)
+
+# Marital status differences in HSQ score
+married <- rdata$HSQ_total55[rdata$marital %in% c(2, 3)]
+unmarried <- rdata$HSQ_total55[rdata$marital %in% c(1, 4:6)]
+t.test(married, unmarried)
+
 # Medical/surgical differences in HSQ score
 surgery <- rdata$HSQ_total55[rdata$surgery == 1]
 medical <- rdata$HSQ_total55[rdata$surgery == 0]
@@ -90,10 +100,6 @@ second_visit <- rdata$HSQ_total55[rdata$readmission == 1]
 first_visit <- rdata$HSQ_total55[rdata$readmission == 0]
 t.test(second_visit, first_visit)
 
-# Marital status differences in HSQ score
-married <- rdata$HSQ_total55[rdata$marital %in% c(2, 3)]
-unmarried <- rdata$HSQ_total55[rdata$marital %in% c(1, 4:6)]
-t.test(married, unmarried)
 
 # Correlates of HSQ score
 cor.test(rdata$age_c, rdata$HSQ_total55)  # age
