@@ -136,6 +136,9 @@ summary(model4)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
+anova(model3, model4, test = "F")
 
 # predicting time to return to usual activities
 model1 <- lm.beta(lm(usual ~ age_c + sex, data = rdata_c), complete.standardization = T)
@@ -149,6 +152,9 @@ summary(model4)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
+anova(model3, model4, test = "F")
 
 # predicting health-related quality of life in two weeks post-discharge (using EQ-5D)
 model1 <- lm.beta(lm(index ~ age_c + sex, data = rdata_c), complete.standardization = T)
@@ -162,6 +168,9 @@ summary(model4)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
+anova(model3, model4, test = "F")
 # Simple slopes plot
 interact_plot(model4, pred = "HSQ_total55", modx = "UCLA_total", interval = TRUE)
 
@@ -177,8 +186,11 @@ summary(model4)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
 summary(model4)$r.squared - summary(model3)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
+anova(model3, model4, test = "F")
 
-# Regressions for factors, rather than total score
+# Regressions using factors rather than total score
 
 # predicting post-hospital feelings of vulnerability
 model1 <- lm.beta(lm(vulnerability ~ age_c + sex, data = rdata_c), complete.standardization = T)
@@ -189,6 +201,8 @@ summary(model2)
 summary(model3)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
 
 # predicting time to return to usual activities
 model1 <- lm.beta(lm(usual ~ age_c + sex, data = rdata_c), complete.standardization = T)
@@ -199,6 +213,8 @@ summary(model2)
 summary(model3)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
 
 # predicting health-related quality of life in two weeks post-discharge (using EQ-5D)
 model1 <- lm.beta(lm(index ~ age_c + sex, data = rdata_c), complete.standardization = T)
@@ -209,6 +225,8 @@ summary(model2)
 summary(model3)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
 
 # predicting patient outcomes used in PACT-M
 model1 <- lm.beta(lm(PACTM_total ~ age_c + sex, data = rdata_c), complete.standardization = T)
@@ -219,3 +237,5 @@ summary(model2)
 summary(model3)
 summary(model2)$r.squared - summary(model1)$r.squared
 summary(model3)$r.squared - summary(model2)$r.squared
+anova(model1, model2, test = "F")
+anova(model2, model3, test = "F")
