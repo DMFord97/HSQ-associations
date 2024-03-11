@@ -1,4 +1,4 @@
-# Code in R (v4.3.2) for the paper: "Associations of in-hospital psychological stress"
+# Code in R (v4.3.2) for the paper: "In-hospital psychological stress and post-hospital outcomes"
 
 # Load packages
 install.packages("tidyverse")
@@ -69,7 +69,7 @@ rdata <- rdata %>% mutate(PACTM_total = rowSums(across(PACTM_1:PACTM_4)))
 rdata <- rdata %>% mutate(usual = recode(usual, "1" = 0.5, "2" = 1.5, "3" = 3, "4" = 5, "5" = 9, "6" = 19.5, "7" = 39, "8" = 52))
 
 # See "Psychometric validation of the Hospital Stress Questionnaire" for descriptive statistics
-# See GitHub repository "DMFord97/Validation" for R code to produce desriptive statistics
+# See GitHub repository "DMFord97/Validation" for R code to reproduce desriptive statistics
 
 # Sex differences in HSQ score
 HSQ_male <- rdata$HSQ_total55[rdata$sex == 1]
