@@ -86,10 +86,15 @@ married <- rdata$HSQ_total55[rdata$marital %in% c(2, 3)]
 unmarried <- rdata$HSQ_total55[rdata$marital %in% c(1, 4:6)]
 t.test(married, unmarried)
 
+# Planned/unplanned readmission differences in HSQ score
+unplanned <- rdata$HSQ_total55[rdata$planned == 0]
+plan <- rdata$HSQ_total55[rdata$planned == 1]
+t.test(plan, unplanned)
+
 # Medical/surgical differences in HSQ score
-surgery <- rdata$HSQ_total55[rdata$surgery == 1]
 medical <- rdata$HSQ_total55[rdata$surgery == 0]
-t.test(surgery, medical)
+surgical <- rdata$HSQ_total55[rdata$surgery == 1]
+t.test(surgical, medical)
 # Control for planned/emergency
 ancova <- lm(HSQ_total55 ~ surgery + planned, data = rdata)
 summary(ancova)
