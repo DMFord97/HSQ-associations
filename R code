@@ -111,12 +111,13 @@ t.test(second_visit, first_visit)
 
 
 # Correlates of HSQ score
-cor.test(rdata$age_c, rdata$HSQ_total55)  # age
-cor.test(rdata$LOS, rdata$HSQ_total55)  # length of stay
-cor.test(rdata$stays_life, rdata$HSQ_total55)  # number of previous hospital stays in life
-cor.test(rdata$stays_year, rdata$HSQ_total55)  # number of previous hospital stays in past year
-cor.test(rdata$UCLA_total, rdata$HSQ_total55)  # UCLA
-cor.test(rdata$LSNS_total, rdata$HSQ_total55)  # LSNS
+ks.test(rdata$HSQ_total55, "pnorm")
+cor.test(rdata$age_c, rdata$HSQ_total55, method = "spearman")  # age
+cor.test(rdata$LOS, rdata$HSQ_total55, method = "spearman")  # length of stay
+cor.test(rdata$stays_life, rdata$HSQ_total55, method = "spearman")  # number of previous hospital stays in life
+cor.test(rdata$stays_year, rdata$HSQ_total55, method = "spearman")  # number of previous hospital stays in past year
+cor.test(rdata$UCLA_total, rdata$HSQ_total55, method = "spearman")  # UCLA
+cor.test(rdata$LSNS_total, rdata$HSQ_total55, method = "spearman")  # LSNS
 
 # Hierarchical regressions
 # model1 - age and sex
